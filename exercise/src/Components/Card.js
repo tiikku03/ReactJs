@@ -1,4 +1,5 @@
 import React from "react";
+import '../Css/Card.css';
 
 function Card(props) {
 
@@ -9,7 +10,8 @@ return (
           <h2>{product.title}</h2>
           <p>{product.description}</p>
           <p>Category: {product.category.name}</p>
-          <img src={product.images[0]} alt={product.title} />
+          <img src={product.images[0]} alt={product.title}/>
+          <button>Comprar</button>
         </div>
       )
     })

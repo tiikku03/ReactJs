@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import React  from "react";
 import Card from './Card';
+import '../Css/CardContainer.css'; 
 
 // Your fetchData function remains the same, it's good!
 function fetchData(url) {
@@ -49,13 +50,11 @@ function CardContainer() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="contenedor">
         <h1>Our Products</h1>
         <div className="card-container"> 
           <Card dataArray={products} onClick={handleCardClick}></Card>
         </div>
-      </header>
     </div>
   );
 }
