@@ -1,9 +1,108 @@
-.form{
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+
+h1{
+    text-align: center;
+    color: #333;
+    margin-bottom: 2rem;
+}
+form{
+    height: auto;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+label{
+    display: block;
+}
+
+input{
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 
 }
 
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
 input {
     color: black;
+}
 
-} 
+select {
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.submitButton{
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.patientItem{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 1rem 0;
+    background-color:#f9f9f9;
+    font-size: 1rem;
+    padding: 0.7rem;
+    border-radius: 10px;
+}
+
+.buttons{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editButton, .deleteButton{
+    display: block;
+    margin: 1rem 1rem;
+    background-color: #16a2ff;
+    border: none;
+    border-radius: 0.5rem;
+    height: 2rem;
+    width: 5rem;
+    cursor: pointer;
+}
+
+.deleteButton{
+    background-color: #ff5858;
+}
+
+.divitionline{
+    width: 100%;
+    border-top: solid 1px black;
+    margin: 2rem 0;
+    pointer-events: painted;
+}
