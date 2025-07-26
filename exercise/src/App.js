@@ -1,6 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
-import Card from './Components/Card';
+import './App.css'
 import CardContainer from './Components/CardContainer';
 import BuyForm from './Components/BuyForm';
 
