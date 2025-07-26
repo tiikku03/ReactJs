@@ -4,14 +4,6 @@ import { useReducer, useEffect } from "react";
 import "../CSS/DataForm.css";
 import PatientInformation from "./PatientInformation";
 
-let initialArray = [];
-
-let initialState = {
-  fullName: null,
-  age: null,
-  gender: null,
-  symptoms: null,
-};
 
 export default function DataForm() {
   const [formulario, setFormulario] = useState({
@@ -23,11 +15,26 @@ export default function DataForm() {
   });
   const [pacientes, setPacientes] = useState([]);
   const [error, setError] = useState("");
-  const [updateMode, setUpdate] = useState(false)
+  const [updateMode, setUpdate] = useState(false);
+  const [updateId, setUpdateId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null)
 
   const manejarCambio = (e) => {
     const { name, value } = e.target;
     setFormulario({ ...formulario, [name]: value });
+  };
+
+  const manejarEditar = (paciente) => {
+    debugger
+    setUpdate(true);
+    setUpdateId(paciente.id);
+    setFormulario({
+      nombre: paciente.nombre,
+      edad: paciente.edad,
+      genero: paciente.genero,
+      fechaIngreso: paciente.fechaIngreso,
+      sintomas: paciente.sintomas,
+    });
   };
 
   const manejarRegistro = () => {
@@ -38,13 +45,23 @@ export default function DataForm() {
       return;
     }
 
-    const nuevoPaciente = {
-      id: Date.now(),
-      ...formulario,
-    };
+    if (updateMode) {
+      const pacientesActualizados = pacientes.map((p) =>
+        p.id === updateId ? { ...p, ...formulario } : p
+      );
+      setPacientes(pacientesActualizados);
+      setUpdate(false);
+      setUpdateId(null);
+    } else {
+      const nuevoPaciente = {
+        id: Date.now(),
+        ...formulario,
+      };
 
-    setPacientes([...pacientes, nuevoPaciente]);
+      setPacientes([...pacientes, nuevoPaciente]);
 
+      setError("");
+    }
     // Limpiar formulario
     setFormulario({
       nombre: "",
@@ -53,16 +70,17 @@ export default function DataForm() {
       fechaIngreso: "",
       sintomas: "",
     });
-
-    setError("");
   };
 
-  const manejarEdit = (paciente) => {
-    setUpdate(true)
-    let {nombre, edad, genero, fechaIngreso, sintomas} = paciente
-    
-
-    setUpdate(false)
+  const manejarEliminar = (id) => {
+    setDeleteId(id)
+    const confirmar = window.confirm("Desea Eliminar al paciente");
+    if (confirmar) {
+      const listWithOutThePatiente = pacientes.filter(
+        (p) => p.id !== deleteId
+      );
+      setPacientes(listWithOutThePatiente);
+    }
   };
 
   return (
@@ -125,7 +143,7 @@ export default function DataForm() {
         </label>
         <br />
         <button type="submit" className="submitButton">
-          {updateMode? "Guardar": "Registrar Paciente"}
+          {updateMode ? "Guardar" : "Registrar Paciente"}
         </button>
       </form>
       <div className="divitionline"></div>
@@ -152,8 +170,18 @@ export default function DataForm() {
                 <strong> Síntomas:</strong> {paciente.sintomas}
               </span>
               <div className="buttons">
-                <button className="editButton" onClick={manejarEdit(paciente)}>Editar</button>
-                <button className="deleteButton">Eliminar</button>
+                <button
+                  className="editButton"
+                  onClick={() => manejarEditar(paciente)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="deleteButton"
+                  onClick={() => manejarEliminar(paciente.id)}
+                >
+                  Eliminar
+                </button>
               </div>
             </li>
           ))}
