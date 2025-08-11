@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import MostrarActividades from "../Components/MostrarActividades.jsx";
 import RegistrarActividades from "../Components/RegistrarActividades.jsx";
 import ListaDeActividades from "../Components/ListaDeActividades.jsx";
-import MenuIcon from "@mui/icons-material/Menu";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import Menu from "../Components/Menu.jsx";
 
