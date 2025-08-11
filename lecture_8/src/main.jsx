@@ -9,7 +9,6 @@ import HistorialDeActividades from './Pages/HistorialDeActividades.jsx'
 import RegistroDeUsuario from './Pages/RegistroDeUsuario.jsx'
 
 import './index.css'
-import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

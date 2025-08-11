@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import useDataFromLocalStorage from "../hooks/useDataFromLocalStorage";
 import ActividadesEstaSemana from "./ActividadesEstaSemana.jsx";
+import ListaDeActividades from "./ListaDeActividades.jsx";
 
 function RegistrarActividades() {
   const [rawData, setData] = useDataFromLocalStorage(
@@ -18,8 +19,7 @@ function RegistrarActividades() {
   );
   
   const data = Array.isArray(rawData) ? rawData : [];
-  
-  console.log("Hook data:", rawData, "Data procesada:", data);
+
   
   const [actividad, setActividad] = useState("");
   const [horas, setHoras] = useState("");
@@ -55,14 +55,14 @@ function RegistrarActividades() {
     const actividadNombre = actividad.trim();
     const horasNuevas = Number(horas);
 
-    // Verificar si la actividad ya existe
+    
     const currentData = Array.isArray(data) ? data : [];
     const actividadExistente = currentData.find(
       item => item.actividad.toLowerCase() === actividadNombre.toLowerCase()
     );
 
     if (actividadExistente) {
-      // Mostrar alerta de confirmación
+      
       const confirmar = window.confirm(
         `La actividad "${actividadNombre}" ya existe con ${actividadExistente.horas} horas.\n\n` +
         `¿Deseas actualizarla a ${horasNuevas} horas?\n\n` +
@@ -71,33 +71,29 @@ function RegistrarActividades() {
       );
 
       if (confirmar) {
-        // Actualizar la actividad existente
+       
         const datosActualizados = currentData.map(item => 
           item.actividad.toLowerCase() === actividadNombre.toLowerCase()
             ? {
                 ...item,
                 horas: horasNuevas,
-                fecha: new Date().toLocaleDateString() // Actualizar fecha también
+                fecha: new Date().toLocaleDateString() 
               }
             : item
         );
         
         setData(datosActualizados);
         
-        // Limpiar formulario
+       
         setActividad("");
         setHoras("");
         setErrors({});
         setSnackbarMessage(`Actividad "${actividadNombre}" actualizada correctamente!`);
         setOpenSnackbar(true);
-        
-        console.log(`Actividad "${actividadNombre}" actualizada`);
-      } else {
-        console.log("Usuario canceló la actualización");
-        return;
+      
       }
     } else {
-      // Crear nueva actividad
+      
       const nuevaActividad = {
         id: Date.now(),
         actividad: actividadNombre,
@@ -108,7 +104,7 @@ function RegistrarActividades() {
       const newData = [...currentData, nuevaActividad];
       setData(newData);
       
-      // Limpiar formulario
+      
       setActividad("");
       setHoras("");
       setErrors({});
@@ -123,7 +119,7 @@ function RegistrarActividades() {
     setOpenSnackbar(false);
   };
 
-  // Preparar datos para el gráfico
+  
   const prepareGraphicData = () => {
     if (!data || data.length === 0) {
       return {
@@ -143,7 +139,7 @@ function RegistrarActividades() {
     const labels = data.map(activity => activity.actividad);
     const hours = data.map(activity => activity.horas);
     
-    // Usar el mismo color para todas las barras
+    
     const sameColor = '#36A2EB';
 
     return {
@@ -245,6 +241,11 @@ function RegistrarActividades() {
       </Box>
 
       <ActividadesEstaSemana data={graphicData} />
+      
+      {rawData.map(act => {
+        <ListaDeActividades Actividades={act} />
+      })}
+
     </>
   );
 }
