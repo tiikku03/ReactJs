@@ -8,6 +8,7 @@ import RegistrarActividades from "../Components/RegistrarActividades.jsx";
 import ListaDeActividades from "../Components/ListaDeActividades.jsx";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import Menu from "../Components/Menu.jsx";
+import ProfileMenu from "../Components/ProfileMenu.jsx";
 
 const HomePage = () => {
   return (
@@ -27,17 +28,7 @@ const HomePage = () => {
         </Stack>
         <Box>
           <Stack direction={"row"} alignItems="center">
-            <Button>
-              <Typography variant="h6" color="white">Perfil </Typography>
-              <AccountBoxOutlinedIcon
-                sx={{
-                  fontSize: "1.5rem",
-                  color: "White",
-                  margin: "0 0.5rem",
-                  padding: "0",
-                }}
-              />
-            </Button>
+            <ProfileMenu></ProfileMenu>
           </Stack>
         </Box>
       </Stack>
