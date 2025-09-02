@@ -9,8 +9,10 @@ import ListaDeActividades from "../Components/ListaDeActividades.jsx";
 import AccountBoxOutlinedIcon from "@mui/icons-material/AccountBoxOutlined";
 import Menu from "../Components/Menu.jsx";
 import ProfileMenu from "../Components/ProfileMenu.jsx";
+import LocalStorageProvider from "../Context/LocalStorageProvider.jsx";
 
 const HomePage = () => {
+  
   return (
     <>
       <Stack
@@ -43,13 +45,15 @@ const HomePage = () => {
           gap: { xs: 3, lg: 2 },
         }}
       >
-        <Box>
-          <RegistrarActividades />
-          <ListaDeActividades actividades={[]} />
-        </Box>
-        <Box>
-          <MostrarActividades />
-        </Box>
+        <LocalStorageProvider>
+          <Box>
+            <RegistrarActividades />
+            <ListaDeActividades />
+          </Box>
+          <Box>
+            <MostrarActividades />
+          </Box>
+        </LocalStorageProvider>
       </Stack>
     </>
   );

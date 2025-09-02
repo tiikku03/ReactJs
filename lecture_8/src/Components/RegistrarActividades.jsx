@@ -241,11 +241,6 @@ function RegistrarActividades() {
       </Box>
 
       <ActividadesEstaSemana data={graphicData} />
-      
-      {rawData.map(act => {
-        <ListaDeActividades Actividades={act} />
-      })}
-
     </>
   );
 }

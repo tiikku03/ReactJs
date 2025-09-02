@@ -1,20 +1,39 @@
-import React from 'react'
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import React from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import { useContext } from "react";
+import { LocalStorageContext } from "../Context/LocalStorageContext";
 
-function ListaDeActividades(props) {
+
+/*
+{
+        id: Date.now(),
+        actividad: actividadNombre,
+        horas: horasNuevas,
+        fecha: new Date().toLocaleDateString(),
+      };
+
+*/
+function ListaDeActividades() {
+  const { valores, } = useContext(LocalStorageContext);
+
   return (
     <>
       <List>
-        {props.actividades.map((actividad, index) => (
+        {valores.map((actividad, index) => (
           <ListItem key={index}>
-            <ListItemText primary={actividad.nombre} secondary={actividad.descripcion} />
+            <ListItemText
+              primary={actividad?.actividad}
+            />
+            <ListItemText
+              primary={actividad?.horas}
+            />
           </ListItem>
         ))}
       </List>
     </>
-  )
+  );
 }
 
-
-export default ListaDeActividades
+export default ListaDeActividades;
