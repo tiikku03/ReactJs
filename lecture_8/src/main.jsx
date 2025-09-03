@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
-//pages
+
 import InicioDeSecion from './Pages/InicioDeSecion.jsx'
 import HomePage from './Pages/HomePage.jsx'
 import HistorialDeActividades from './Pages/HistorialDeActividades.jsx'
