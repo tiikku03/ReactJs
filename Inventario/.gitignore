@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
+inventario-471218-8a6d30514e49.json
 .vscode/*
 !.vscode/extensions.json
 .idea
