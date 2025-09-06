@@ -1,63 +1,77 @@
-import { useState, useEffect, useRef } from 'react';
-import { BrowserMultiFormatReader } from '@zxing/browser';
-import { NotFoundException } from '@zxing/library';
+import { useState, useEffect, useRef } from "react";
+import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
+
 function useScannerFromVideoDevice() {
   const [result, setResult] = useState(null);
   const videoRef = useRef(null);
   const [error, setError] = useState(null);
-  const [videoDevices, setVideoDevices] = useState([]);
-  const [selectedDevice, setSelectedDevice] = useState('');
+  const [cameraId, setCameraId] = useState(null);
+  const readerRef = useRef(null); 
 
-  // 1. Efecto para pedir permisos y obtener la lista de dispositivos
   useEffect(() => {
-    const getDevices = async () => {
+    async function getCameraId() {
       try {
-        // Pide permiso para la cámara
         await navigator.mediaDevices.getUserMedia({ video: true });
-        
-        // Una vez con permiso, obtén la lista de dispositivos
-        const devices = await BrowserMultiFormatReader().listVideoInputDevices();
-        
-        setVideoDevices(devices);
-        if (devices.length > 0) {
-          setSelectedDevice(devices[0].deviceId); // Selecciona el primer dispositivo por defecto
-        }
-      } catch (err) {
-        setError('No se pudo acceder a la cámara. Por favor, otorga los permisos necesarios.');
-        console.error(err);
-      }
-    };
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const cameras = devices.filter(
+          (device) => device.kind === "videoinput"
+        );
 
-    getDevices();
+        if (cameras.length > 0) {
+          setCameraId(cameras[0].deviceId);
+        }
+      } catch (error) {
+        setError("Error al acceder a la cámara o obtener el ID.");
+        console.error(error);
+      }
+    }
+    getCameraId();
   }, []);
 
-  // 2. Efecto para iniciar el escaneo cuando hay un dispositivo seleccionado
   useEffect(() => {
-    if (!selectedDevice || !videoRef.current) {
-      return;
+    if (cameraId && videoRef.current) {
+      startScanning();
     }
+    return () => {
+      stopScanning();
+    };
+  }, [cameraId]);
 
-    const codeReader = new BrowserMultiFormatReader();
+  function scanner(){
+    if(readerRef.current) return;
+    //para hacer que el video siga corriendo luego de haber escaneado el codigo
+  }
+  scanner()
+
+  function startScanning() {
+    // Si ya existe una instancia del lector, no crear otra
+    if (readerRef.current) return;
     
-    // Inicia el escaneo desde el dispositivo seleccionado
-    codeReader.decodeFromVideoDevice(selectedDevice, videoRef.current, (scanResult, err) => {
-      if (scanResult) {
-        setResult(scanResult.getText());
-        // Detiene el escaneo una vez que se encuentra un resultado
-        codeReader.reset(); 
-      } else if (err && !(err instanceof NotFoundException)) {
-        setError('Ocurrió un error durante el escaneo.');
-        console.error(err);
+    const codeReader = new BrowserMultiFormatReader();
+    readerRef.current = codeReader; // Guardar la instancia en la referencia
+
+    codeReader.decodeFromVideoDevice(cameraId, videoRef.current, (res, err) => {
+      if (res) {
+        setResult(res.getText());
+        console.log("Resultado del escaneo:", res.getText());
+        stopScanning(); 
+      }
+      if (err && !(err instanceof NotFoundException)) {
+        setError("Error durante el escaneo");
+        console.error("Error al decodificar:", err);
       }
     });
+  }
 
-    // Función de limpieza para detener el lector cuando el componente se desmonte
-    return () => {
-      codeReader.reset();
-    };
-  }, [selectedDevice]); // Se ejecuta cada vez que cambia el dispositivo seleccionado
+  function stopScanning() {
+    if (readerRef.current) {
+      readerRef.current.reset(); // Método para detener la decodificación y el video
+      readerRef.current = null; // Limpiar la referencia
+    }
+  }
 
-  return { result, error, videoRef, videoDevices, setSelectedDevice };
+  return { result, error, videoRef, startScanning, stopScanning };
+
 }
 
 export default useScannerFromVideoDevice;

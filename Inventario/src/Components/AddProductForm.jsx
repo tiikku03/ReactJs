@@ -1,93 +1,113 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useScannerFromVideoDevice from "../Hooks/useScannerFromVideoDevice";
 
 function AddProductForm() {
+  
   const [producto, setProducto] = useState({
-    nombre: null,
-    cantidad: null,
-    id: null,
-    categoria: null,
+    nombre: "",
+    cantidad: "",
+    id: "",
+    categoria: "",
   });
 
-
-  console.log(producto)
-  const { result, error, videoRef, videoDevices, setSelectedDevice } =
+  const { result, error, videoRef, startScanning, stopScanning } =
     useScannerFromVideoDevice();
 
-  if (result) {
-    setProducto(...producto, (producto.id = result));
-  }
+  
+  useEffect(() => {
+    if (result) {  
+      setProducto((prevProducto) => ({
+        ...prevProducto,
+        id: result,
+      }));
+    }
+  }, [result]); 
 
-  console.log(videoDevices);
+  
+
+
+  
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProducto((prevProducto) => ({
+      ...prevProducto,
+      [name]: value,
+    }));
+  };
 
   const clearForm = () => {
     setProducto({
-      nombre: '',
-      cantidad: '',
-      id: '',
-      categoria: '',
+      nombre: "",
+      cantidad: "",
+      id: "",
+      categoria: "",
     });
   };
-  const handleSubmit = () => {
-    console.log(producto);
+
+ 
+  const handleSubmit = (e) => {
+    e.preventDefault(); 
+    console.log("Producto a guardar:", producto);
     clearForm();
   };
-  console.log(producto)
 
   return (
-    <div>
-      <video ref={videoRef} autoPlay />
-      <form action="/" className="w-full" onSubmit={handleSubmit}>
-        <fieldset className="w-full h-[10rem] flex  flex-col items-center justify-around">
+    <div className="p-4">
+      
+
+      <video ref={videoRef} autoPlay className="w-full max-w-md border rounded mb-4" />
+      {error && <p className="text-red-500">{error}</p>}
+      <button onClick={startScanning} className="bg-green-400 h-10 w-50 rounded-[1rem] active:bg-green-500">Comenzar el escaneo</button>
+      <button onClick={stopScanning} className="bg-red-400 h-10 w-50 rounded-[1rem] active:bg-red-500">Detener</button>
+      {result && 
+      <form className="w-full max-w-md" onSubmit={handleSubmit}>
+        <fieldset className="flex flex-col items-center gap-4">
           <input
-            type="number"
-            placeholder="1548654687"
-            className=""
+            type="text" 
+            name="id" 
+            placeholder="ID del Producto (escanea un código)"
+            className="p-2 border rounded w-full"
             value={producto.id}
-            onChange={(e) =>
-              setProducto(...producto, (producto.id = e.target.value))
-            }
+            onChange={handleChange}
           />
           <input
             type="text"
+            name="nombre"
             placeholder="Nombre del Producto"
+            className="p-2 border rounded w-full"
             value={producto.nombre}
-            onChange={(e) =>
-              setProducto(...producto, (producto.nombre = e.target.value))
-            }
+            onChange={handleChange}
           />
           <input
             type="number"
-            placeholder="cantidad"
+            name="cantidad"
+            placeholder="Cantidad"
+            className="p-2 border rounded w-full"
             value={producto.cantidad}
-            onChange={(e) =>
-              setProducto(...producto, (producto.cantidad = e.target.value))
-            }
+            onChange={handleChange}
           />
           <select
-            name="Categoria"
-            id=""
+            name="categoria"
+            className="p-2 border rounded w-full"
             value={producto.categoria}
-            onChange={(e) =>
-              setProducto(...producto, (producto.categoria = e.target.value))
-            }
+            onChange={handleChange}
           >
-            <option value="Elige la Categoria">Categoria</option>
-            <option value="Categoria 3">Categoria 3</option>
-            <option value="Crear Categoria">Crear Categoria</option>
+            <option value="">Elige la Categoría</option>
+            <option value="Categoria 1">Categoría 1</option>
+            <option value="Categoria 2">Categoría 2</option>
           </select>
-          <button className="bg-[#0077B6] w-[6rem] h-[2rem] rounded-[0.5rem]">
+          <button
+            type="submit" // Botón de tipo submit para el formulario
+            className="bg-[#0077B6] text-white w-full h-[2.5rem] rounded-[0.5rem] hover:bg-[#005f8e] transition-colors"
+          >
             Guardar
           </button>
         </fieldset>
       </form>
+      }
+      
     </div>
   );
 }
 
 export default AddProductForm;
-
-function crearCategoria() {
-  return <></>;
-}

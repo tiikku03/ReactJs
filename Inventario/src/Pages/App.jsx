@@ -9,8 +9,8 @@ function App() {
     <div className='m-[1rem] h-auto flex flex-col gap-4 items-center justify-center '>
       <Header />
       <h1 className='text-2xl font-bold'>Scanner</h1>
-      <Scanner />
-      <AddProductForm />
+      <AddProductForm></AddProductForm>
+      
     </div>
   )
 }
